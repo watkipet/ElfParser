@@ -63,6 +63,7 @@ namespace ElfParser.Dwarf
         public DW_CHILDREN HasChildren { get; private set; }
         public List<Attribute> AttributeList { get; private set; }
         public List<DebuggingInformationEntry> Children { get; private set; }
+        public DebuggingInformationEntry Parent { get; set; }
 
         public DebuggingInformationEntry(int id, ulong code, DW_TAG tag, DW_CHILDREN hasChildren)
         {

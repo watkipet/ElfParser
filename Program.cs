@@ -261,10 +261,33 @@ namespace ElfParser
                     {
                         // Make sure to flag pointers
                         isPointer = die.Tag == DW_TAG.PointerType || isPointer;
+
+                        // Don't recurse to a type that we're already inside
+                        // TODO: Do this everywhere.
+                        if (IdBelongsToParent(die, typeDie.Id))
+                        {
+                            break;
+                        }
+
                         TraverseVariableRecursive(cu, typeDie, varTree, strData, isPointer);
                     }
                     break;
             }
+        }
+
+        static bool IdBelongsToParent(DebuggingInformationEntry die, int id)
+        {
+            if (die.Id == id)
+            {
+                return true;
+            }
+
+            if (die.Parent == null)
+            {
+                return false;
+            }
+
+            return IdBelongsToParent(die.Parent, id);
         }
 
         // Print variable tree
@@ -381,6 +404,10 @@ namespace ElfParser
                 {
                     var childDieList = InflateDieListRecursive(dieList, ref index);
                     die.AddDieList(childDieList);
+                    foreach (var child in childDieList)
+                    {
+                        child.Parent = die;
+                    }
                 }
                 output.Add(die);
             }
