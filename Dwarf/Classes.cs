@@ -8,8 +8,8 @@ namespace ElfParser.Dwarf
 {
     class CompilationUnit
     {
-        public CompilationUnitHeader Cuh { get; }
-        public List<DebuggingInformationEntry> DieList { get; }
+        public CompilationUnitHeader Cuh { get; private set; }
+        public List<DebuggingInformationEntry> DieList { get; private set; }
 
         public CompilationUnit(CompilationUnitHeader cuh, List<DebuggingInformationEntry> dieList)
         {
@@ -38,10 +38,10 @@ namespace ElfParser.Dwarf
 
     class CompilationUnitHeader
     {
-        public int Id { get; }
-        public uint Length { get; } // Byte length, not including this field
+        public int Id { get; private set; }
+        public uint Length { get; private set; } // Byte length, not including this field
         ushort Version; // DWARF version
-        public uint AbbrevOffset { get; } // Offset into .debug_abbrev
+        public uint AbbrevOffset { get; private set; } // Offset into .debug_abbrev
         byte PtrSize; // Size in bytes of an address
 
 
@@ -57,12 +57,12 @@ namespace ElfParser.Dwarf
 
     class DebuggingInformationEntry
     {
-        public int Id { get; }
-        public ulong Code { get; }
-        public DW_TAG Tag { get; }
-        public DW_CHILDREN HasChildren { get; }
-        public List<Attribute> AttributeList { get; }
-        public List<DebuggingInformationEntry> Children { get; }
+        public int Id { get; private set; }
+        public ulong Code { get; private set; }
+        public DW_TAG Tag { get; private set; }
+        public DW_CHILDREN HasChildren { get; private set; }
+        public List<Attribute> AttributeList { get; private set; }
+        public List<DebuggingInformationEntry> Children { get; private set; }
 
         public DebuggingInformationEntry(int id, ulong code, DW_TAG tag, DW_CHILDREN hasChildren)
         {
@@ -123,9 +123,9 @@ namespace ElfParser.Dwarf
 
     class Attribute
     {
-        public DW_AT Name { get; }
-        public DW_FORM Form { get; }
-        public byte[] Value { get; }
+        public DW_AT Name { get; private set; }
+        public DW_FORM Form { get; private set; }
+        public byte[] Value { get; private set; }
 
         public Attribute(ulong name, ulong form)
         {
@@ -143,11 +143,11 @@ namespace ElfParser.Dwarf
 
     class Abbreviation
     {
-        public int Offset { get; }
-        public ulong Code { get; }
-        public DW_TAG Tag { get; }
-        public DW_CHILDREN HasChildren { get; }
-        public List<Attribute> AttributeList { get; }
+        public int Offset { get; private set; }
+        public ulong Code { get; private set; }
+        public DW_TAG Tag { get; private set; }
+        public DW_CHILDREN HasChildren { get; private set; }
+        public List<Attribute> AttributeList { get; private set; }
 
         public Abbreviation(int start, ulong code, DW_TAG tag, DW_CHILDREN hasChildren)
         {
