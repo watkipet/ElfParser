@@ -11,6 +11,33 @@ namespace ElfParser
 {
     internal class Program
     {
+        /// <summary>
+        /// The usage string for command-line usage
+        /// </summary>
+        private const string Usage = "ElfParser.exe [OPTIONS] <My_elf_file.elf> [Symbol]";
+
+        /// <summary>
+        /// The response to the --help option
+        /// </summary>
+        private const string Help = @"NAME
+    ElfParser.exe -- dump DWARF debug information from an ELF file.
+
+SYNOPSIS
+    " + Usage + @"
+
+DESCRIPTION
+    Parses an ELF file, looks for DWARF debug information, and dumps that 
+    information.
+
+    The following options are available:
+
+    --help
+        Prints this help message.
+
+    --string-section-name=NAME
+        Look for string information in NAME instead of .debug_str.
+";
+
         static public List<string> Type = new List<string> {
             "CHAR",
             "BOOL",
@@ -33,6 +60,26 @@ namespace ElfParser
         private static void Main(string[] args)
         {
             var elfName = "";
+            var stringsSectioName = ".debug_str";
+
+            // Handle optional arguments
+            var optionals = args.Where(e => e.StartsWith("-")).ToList();
+            string optional;
+
+            if ((optionals.FirstOrDefault(e => e == "--help")) != null)
+            {
+                Console.WriteLine(Help);
+                Environment.Exit(1);
+            }
+
+            if ((optional = optionals.FirstOrDefault(e => e.StartsWith("--string-section-name")))
+                != null)
+            {
+                stringsSectioName = optional.Split('=').Last();
+            }
+
+            // Remove the optionals from subsequent parsing
+            args = args.Where(e => !optionals.Contains(e)).ToArray();
 
             switch (args.Length)
             {
@@ -41,7 +88,7 @@ namespace ElfParser
                     break;
                 default:
                     Console.WriteLine("Invalid number of parameters!");
-                    Console.WriteLine("Usage: ElfParser.exe <My_elf_file.elf> [Symbol]");
+                    Console.WriteLine("Usage: " + Usage);
                     Environment.Exit(1);
                     break;
             }
@@ -49,7 +96,7 @@ namespace ElfParser
             // Load ELF file and extract .debug_str
             var elfFile = ELFSharp.ELF.ELFReader.Load(elfName);
 			EBitConverter.DataIsLittleEndian = elfFile.Endianess == Endianess.LittleEndian;
-            var strData = elfFile.Sections.Where(s => s.Name == ".debug_str").First().GetContents().ToList();
+            var strData = elfFile.Sections.Where(s => s.Name == stringsSectioName).First().GetContents().ToList();
 
             // Parse abbreviations and compilation units
             var abbrevList = ExtractAbbrevList(elfFile);
