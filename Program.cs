@@ -107,7 +107,7 @@ namespace ElfParser
         // Traverse variable tree
         static void TraverseVariableRecursive(CompilationUnit cu, DebuggingInformationEntry die, Variable varTree, List<byte> strData, bool isPointer)
         {
-            var dieList = cu.GetChildren();
+            var dieList = DeflateDieListRecursive(cu.GetChildren());
             DebuggingInformationEntry typeDie;
             Dwarf.Attribute sizeDie;
             Variable memberVar;
@@ -410,6 +410,24 @@ namespace ElfParser
                     }
                 }
                 output.Add(die);
+            }
+            return output;
+        }
+
+        // Ungroup children to parent DIEs
+        static List<DebuggingInformationEntry> DeflateDieListRecursive(List<DebuggingInformationEntry> dieList)
+        {
+            var output = new List<DebuggingInformationEntry>();
+            for (var i = dieList.Count - 1; i >= 0; i--)
+            {
+                var die = dieList.ElementAt(i);
+                output.Add(die);
+
+                if (die.HasChildren == DW_CHILDREN.Yes)
+                {
+                    var childDieList = DeflateDieListRecursive(die.Children);
+                    output.AddRange(childDieList);
+                }
             }
             return output;
         }
