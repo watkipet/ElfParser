@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElfParser", "ElfParser.csproj", "{D9BFAC67-02AE-4EC0-8829-5F8375D19C17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElfParser", "ElfParser\ElfParser.csproj", "{D9BFAC67-02AE-4EC0-8829-5F8375D19C17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DWARFSharp", "DWARFSharp\DWARFSharp.csproj", "{DB9C974D-9E48-4F74-ACE8-168F1C0756EF}"
 EndProject
