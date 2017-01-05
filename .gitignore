@@ -6,3 +6,5 @@ DWARFSharp/obj
 DWARFSharp/bin
 DWARFSharp/DWARFSharp.suo
 DWARFSharp/DWARFSharp.csproj.user
+packages
+ElfParser.suo
