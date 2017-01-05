@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes.cs" />
     <Compile Include="Dwarf\Classes.cs" />
     <Compile Include="Dwarf\Defines.cs" />
     <Compile Include="Dwarf\LEB128.cs" />
