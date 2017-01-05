@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElfParser.Dwarf
+namespace DWARFSharp.Dwarf
 {
-    class Parse
+    public class Parse
     {
         // Parse compilation unit from .debug_info
         public static CompilationUnit CU(List<byte> infoData, ref int index, List<Abbreviation> abbrevList)

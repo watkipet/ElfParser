@@ -59,6 +59,12 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DWARFSharp\DWARFSharp.csproj">
+      <Project>{DB9C974D-9E48-4F74-ACE8-168F1C0756EF}</Project>
+      <Name>DWARFSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

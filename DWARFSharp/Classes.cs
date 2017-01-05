@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElfParser
+namespace DWARFSharp
 {
-    class Module
+    public class Module
     {
         public string Name { get; private set; }
         public List<Variable> VariableList { get; private set; }
@@ -23,7 +23,7 @@ namespace ElfParser
         }
     }
 
-    class Variable
+    public class Variable
     {
       public string Name { get; private set; }
         public string Type { get; set; }

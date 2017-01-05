@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElfParser.Dwarf
+namespace DWARFSharp.Dwarf
 {
     public enum DW_TAG
     {

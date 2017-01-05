@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElfParser.Dwarf
+namespace DWARFSharp.Dwarf
 {
-    class CompilationUnit
+    public class CompilationUnit
     {
         public CompilationUnitHeader Cuh { get; private set; }
         public List<DebuggingInformationEntry> DieList { get; private set; }
@@ -36,7 +36,7 @@ namespace ElfParser.Dwarf
         }
     }
 
-    class CompilationUnitHeader
+    public class CompilationUnitHeader
     {
         public int Id { get; private set; }
         public uint Length { get; private set; } // Byte length, not including this field
@@ -55,7 +55,7 @@ namespace ElfParser.Dwarf
         }
     }
 
-    class DebuggingInformationEntry
+    public class DebuggingInformationEntry
     {
         public int Id { get; private set; }
         public ulong Code { get; private set; }
@@ -123,7 +123,7 @@ namespace ElfParser.Dwarf
         }
     }
 
-    class Attribute
+    public class Attribute
     {
         public DW_AT Name { get; private set; }
         public DW_FORM Form { get; private set; }
@@ -143,7 +143,7 @@ namespace ElfParser.Dwarf
         }
     }
 
-    class Abbreviation
+    public class Abbreviation
     {
         public int Offset { get; private set; }
         public ulong Code { get; private set; }
