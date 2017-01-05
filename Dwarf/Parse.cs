@@ -93,9 +93,9 @@ namespace ElfParser.Dwarf
             var cuhData = infoData.GetRange(index, cuhLength).ToArray();
             index += cuhLength;
 
-            var length = BitConverter.ToUInt32(cuhData, 0);
-            var version = BitConverter.ToUInt16(cuhData, 4);
-            var offset = BitConverter.ToUInt32(cuhData, 6);
+            var length = EBitConverter.ToUInt32(cuhData, 0);
+            var version = EBitConverter.ToUInt16(cuhData, 4);
+            var offset = EBitConverter.ToUInt32(cuhData, 6);
             var size = cuhData[10];
 
             return new CompilationUnitHeader(id, length, version, offset, size);

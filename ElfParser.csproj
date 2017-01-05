@@ -56,6 +56,7 @@
     <Compile Include="Dwarf\Defines.cs" />
     <Compile Include="Dwarf\LEB128.cs" />
     <Compile Include="Dwarf\Read.cs" />
+    <Compile Include="EBitConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

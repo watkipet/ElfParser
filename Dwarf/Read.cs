@@ -19,21 +19,21 @@ namespace ElfParser.Dwarf
                     index += 4;
                     break;
                 case DW_FORM.Block2:
-                    {
-                        var numBytes = BitConverter.ToInt32(infoData.GetRange(index, 2).ToArray(), 0);
-                        index += 2;
-                        output.AddRange(infoData.GetRange(index, numBytes));
-                        index += numBytes;
-                        break;
-                    }
+                {
+                    var numBytes = EBitConverter.ToInt16(infoData.GetRange(index, 2).ToArray(), 0);
+                    index += 2;
+                    output.AddRange(infoData.GetRange(index, numBytes));
+                    index += numBytes;
+                    break;
+                }
                 case DW_FORM.Block4:
-                    {
-                        var numBytes = BitConverter.ToInt32(infoData.GetRange(index, 4).ToArray(), 0);
-                        index += 4;
-                        output.AddRange(infoData.GetRange(index, numBytes));
-                        index += numBytes;
-                        break;
-                    }
+                {
+                    var numBytes = EBitConverter.ToInt32(infoData.GetRange(index, 4).ToArray(), 0);
+                    index += 4;
+                    output.AddRange(infoData.GetRange(index, numBytes));
+                    index += numBytes;
+                    break;
+                }
                 case DW_FORM.Data2:
                     output.AddRange(infoData.GetRange(index, 2));
                     index += 2;
@@ -84,53 +84,57 @@ namespace ElfParser.Dwarf
                     index++;
                     break;
                 case DW_FORM.Sdata:
-                    output = BitConverter.GetBytes(LEB128.ReadSigned(infoData, ref index)).ToList<byte>();
+                    output =
+                        EBitConverter.GetBytes(LEB128.ReadSigned(infoData, ref index))
+                            .ToList<byte>();
                     break;
                 case DW_FORM.Strp:
                     output.AddRange(infoData.GetRange(index, 4));
                     index += 4;
                     break;
                 case DW_FORM.Udata:
-                    output = BitConverter.GetBytes(LEB128.ReadUnsigned(infoData, ref index)).ToList<byte>();
+                    output =
+                        EBitConverter.GetBytes(LEB128.ReadUnsigned(infoData, ref index))
+                            .ToList<byte>();
                     break;
                 case DW_FORM.RefAddr:
                     output.AddRange(infoData.GetRange(index, 4));
                     index += 4;
                     break;
                 case DW_FORM.Ref1:
-                    {
-                        var reference = BitConverter.ToInt32(infoData.GetRange(index, 1).ToArray(), 0);
-                        index++;
-                        output = BitConverter.GetBytes(cuId + reference).ToList<byte>();
-                        break;
-                    }
+                {
+                    var reference = EBitConverter.ToInt32(infoData.GetRange(index, 1).ToArray(), 0);
+                    index++;
+                    output = EBitConverter.GetBytes(cuId + reference).ToList<byte>();
+                    break;
+                }
                 case DW_FORM.Ref2:
-                    {
-                        var reference = BitConverter.ToInt32(infoData.GetRange(index, 2).ToArray(), 0);
-                        index += 2;
-                        output = BitConverter.GetBytes(cuId + reference).ToList<byte>();
-                        break;
-                    }
+                {
+                    var reference = EBitConverter.ToInt32(infoData.GetRange(index, 2).ToArray(), 0);
+                    index += 2;
+                    output = EBitConverter.GetBytes(cuId + reference).ToList<byte>();
+                    break;
+                }
                 case DW_FORM.Ref4:
-                    {
-                        var reference = BitConverter.ToInt32(infoData.GetRange(index, 4).ToArray(), 0);
-                        index += 4;
-                        output = BitConverter.GetBytes(cuId + reference).ToList<byte>();
-                        break;
-                    }
+                {
+                    var reference = EBitConverter.ToInt32(infoData.GetRange(index, 4).ToArray(), 0);
+                    index += 4;
+                    output = EBitConverter.GetBytes(cuId + reference).ToList<byte>();
+                    break;
+                }
                 case DW_FORM.Ref8:
-                    {
-                        var reference = BitConverter.ToInt32(infoData.GetRange(index, 8).ToArray(), 0);
-                        index += 8;
-                        output = BitConverter.GetBytes(cuId + reference).ToList<byte>();
-                        break;
-                    }
+                {
+                    var reference = EBitConverter.ToInt32(infoData.GetRange(index, 8).ToArray(), 0);
+                    index += 8;
+                    output = EBitConverter.GetBytes(cuId + reference).ToList<byte>();
+                    break;
+                }
                 case DW_FORM.RefUdata:
-                    {
-                        var reference = (int)LEB128.ReadUnsigned(infoData, ref index);
-                        output = BitConverter.GetBytes(cuId + reference).ToList<byte>();
-                        break;
-                    }
+                {
+                    var reference = (int) LEB128.ReadUnsigned(infoData, ref index);
+                    output = EBitConverter.GetBytes(cuId + reference).ToList<byte>();
+                    break;
+                }
                 case DW_FORM.Indirect:
                     throw new NotImplementedException("DW_FORM_indirect not yet implemented.");
                 default:

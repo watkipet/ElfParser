@@ -98,7 +98,7 @@ namespace ElfParser.Dwarf
                         output = Encoding.ASCII.GetString(attr.Value);
                         break;
                     case DW_FORM.Strp:
-                        var strp = BitConverter.ToInt32(attr.Value, 0);
+                        var strp = EBitConverter.ToInt32(attr.Value, 0);
                         output = Read.StringPtr(strData, strp);
                         break;
                     default:
@@ -115,8 +115,9 @@ namespace ElfParser.Dwarf
             int output = 0;
             var typeId = AttributeList.Find(a => a.Name == DW_AT.Type);
 
+          // TODO: Should we really be casting to int?
             if (typeId != null)
-                output = BitConverter.ToInt32(typeId.Value, 0);
+                output = (int) EBitConverter.ToInt64(typeId.Value, 0);
 
             return output;
         }

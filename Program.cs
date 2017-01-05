@@ -48,6 +48,7 @@ namespace ElfParser
 
             // Load ELF file and extract .debug_str
             var elfFile = ELFSharp.ELF.ELFReader.Load(elfName);
+			EBitConverter.DataIsLittleEndian = elfFile.Endianess == Endianess.LittleEndian;
             var strData = elfFile.Sections.Where(s => s.Name == ".debug_str").First().GetContents().ToList();
 
             // Parse abbreviations and compilation units
@@ -75,7 +76,7 @@ namespace ElfParser
                     var name = die.GetName(strData);
                     var variable = new Variable(name);
                     var locAttr = die.AttributeList.Find(a => a.Name == DW_AT.Location);
-                    variable.Address = BitConverter.ToInt32(locAttr.Value.Skip(1).Take(4).ToArray(), 0);
+                    variable.Address = EBitConverter.ToInt32(locAttr.Value.Skip(1).Take(4).ToArray(), 0);
 
                     // Traverse variable tree
                     TraverseVariableRecursive(cu, die, variable, strData, false);
@@ -117,7 +118,8 @@ namespace ElfParser
                 case DW_TAG.EnumerationType:
                     // Add size to variable
                     sizeDie = die.AttributeList.Find(a => a.Name == DW_AT.ByteSize);
-                    varTree.ByteSize = sizeDie.Value[0];
+                    // TODO: Should we be casting? Is sizeDie.Value really 8 bytes?
+                    varTree.ByteSize = (int) EBitConverter.ToUInt64(sizeDie.Value, 0);
 
                     switch (varTree.ByteSize)
                     {
@@ -177,9 +179,10 @@ namespace ElfParser
                     break;
                 case DW_TAG.StructureType:
                     // Add size to variable
-                    var size = new byte[4];
+                    var size = new byte[8];
                     die.AttributeList.Find(a => a.Name == DW_AT.ByteSize).Value.CopyTo(size, 0);
-                    varTree.ByteSize = BitConverter.ToInt32(size, 0);
+                    // TODO: Should we be casting?
+                    varTree.ByteSize = (int) EBitConverter.ToInt64(size, 0);
 
                     // Traverse each member
                     foreach (var member in die.Children)
@@ -195,7 +198,10 @@ namespace ElfParser
                     break;
                 case DW_TAG.ArrayType:
                     Dwarf.Attribute arrayAttr;
-                    var arraySize = new byte[4];
+                    // TODO: Array sizes are stored in UData attributes. These are LEB128 and 
+                    // assumed to hold up to 8 bytes. However, are array sizes only a max of 4 
+                    // bytes?
+                    var arraySize = new byte[8];
 
                     switch(die.Children.Count)
                     {
@@ -206,7 +212,7 @@ namespace ElfParser
                             if (arrayAttr != null)
                             {
                                 arrayAttr.Value.CopyTo(arraySize, 0);
-                                varTree.ArraySize[0] = BitConverter.ToInt32(arraySize, 0) + 1;
+                                varTree.ArraySize[0] = (int) (EBitConverter.ToInt64(arraySize, 0) + 1);
                             }
                             break;
                         case 2:
@@ -222,7 +228,7 @@ namespace ElfParser
                                 if (arrayAttr != null)
                                 {
                                     arrayAttr.Value.CopyTo(arraySize, 0);
-                                    varTree.ArraySize[1] = BitConverter.ToInt32(arraySize, 0) + 1;
+                                    varTree.ArraySize[1] = (int) (EBitConverter.ToInt64(arraySize, 0) + 1);
                                 }
                             }
                             break;
