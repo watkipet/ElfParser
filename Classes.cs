@@ -8,8 +8,8 @@ namespace ElfParser
 {
     class Module
     {
-        public string Name { get; }
-        public List<Variable> VariableList { get; }
+        public string Name { get; private set; }
+        public List<Variable> VariableList { get; private set; }
 
         public Module(string name)
         {
@@ -25,12 +25,12 @@ namespace ElfParser
 
     class Variable
     {
-        public string Name { get; }
+      public string Name { get; private set; }
         public string Type { get; set; }
         public int Address { get; set; }
         public int[] ArraySize { get; set; }
         public int ByteSize { get; set; }
-        public List<Variable> VariableList { get; }
+        public List<Variable> VariableList { get; private set; }
 
         public Variable(string name)
         {
@@ -50,8 +50,8 @@ namespace ElfParser
 
     class Typedef
     {
-        public string Name { get; }
-        public List<Member> MemberList { get; }
+      public string Name { get; private set; }
+      public List<Member> MemberList { get; private set; }
 
         public Typedef(string name)
         {
@@ -67,9 +67,9 @@ namespace ElfParser
 
     class Member
     {
-        public string Name { get; }
-        public string TypeName { get; }
-        public int RelAddress { get; }
+      public string Name { get; private set; }
+      public string TypeName { get; private set; }
+      public int RelAddress { get; private set; }
 
         public Member(string name, string typeName, int relAddress)
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElfParser.Dwarf
 {
-    class Read
+    internal class Read
     {
         // Read attribute value from .debug_info
         public static List<byte> AttributeValue(List<byte> infoData, ref int index, Attribute attribute, int cuId)
