@@ -1,11 +1,11 @@
-using ElfParser.Dwarf;
-using ELFSharp.ELF;
-using ELFSharp.ELF.Sections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using DWARFSharp.Dwarf;
+using DWARFSharp.Utility;
+using ELFSharp.ELF;
 
 namespace ElfParser
 {
@@ -94,7 +94,7 @@ DESCRIPTION
             }
 
             // Load ELF file and extract .debug_str
-            var elfFile = ELFSharp.ELF.ELFReader.Load(elfName);
+            var elfFile = ELFReader.Load(elfName);
 			EBitConverter.DataIsLittleEndian = elfFile.Endianess == Endianess.LittleEndian;
             var strData = elfFile.Sections.Where(s => s.Name == stringsSectioName).First().GetContents().ToList();
 
@@ -112,7 +112,7 @@ DESCRIPTION
                 moduleList.Add(module);
 
                 // Extract all variables with location attribute
-                var dieList = cu.GetChildren().Where(d => 
+                var dieList = cu.GetChildren().Where(d =>
                     d.Tag == DW_TAG.Variable && 
                     d.AttributeList.Exists(a => a.Name == DW_AT.Location));
 
@@ -157,7 +157,7 @@ DESCRIPTION
         {
             var dieList = DeflateDieListRecursive(cu.GetChildren());
             DebuggingInformationEntry typeDie;
-            Dwarf.Attribute sizeDie;
+            DWARFSharp.Dwarf.Attribute sizeDie;
             Variable memberVar;
 
             switch (die.Tag)
@@ -166,7 +166,7 @@ DESCRIPTION
                     // Add size to variable
                     sizeDie = die.AttributeList.Find(a => a.Name == DW_AT.ByteSize);
                     // TODO: Should we be casting? Is sizeDie.Value really 8 bytes?
-                    varTree.ByteSize = (int) EBitConverter.ToUInt64(sizeDie.Value, 0);
+                    varTree.ByteSize = (int)EBitConverter.ToUInt64(sizeDie.Value, 0);
 
                     switch (varTree.ByteSize)
                     {
@@ -229,7 +229,7 @@ DESCRIPTION
                     var size = new byte[8];
                     die.AttributeList.Find(a => a.Name == DW_AT.ByteSize).Value.CopyTo(size, 0);
                     // TODO: Should we be casting?
-                    varTree.ByteSize = (int) EBitConverter.ToInt64(size, 0);
+                    varTree.ByteSize = (int)EBitConverter.ToInt64(size, 0);
 
                     // Traverse each member
                     foreach (var member in die.Children)
@@ -244,7 +244,7 @@ DESCRIPTION
                     }
                     break;
                 case DW_TAG.ArrayType:
-                    Dwarf.Attribute arrayAttr;
+                    DWARFSharp.Dwarf.Attribute arrayAttr;
                     // TODO: Array sizes are stored in UData attributes. These are LEB128 and 
                     // assumed to hold up to 8 bytes. However, are array sizes only a max of 4 
                     // bytes?
@@ -259,7 +259,7 @@ DESCRIPTION
                             if (arrayAttr != null)
                             {
                                 arrayAttr.Value.CopyTo(arraySize, 0);
-                                varTree.ArraySize[0] = (int) (EBitConverter.ToInt64(arraySize, 0) + 1);
+                                varTree.ArraySize[0] = (int)(EBitConverter.ToInt64(arraySize, 0) + 1);
                             }
                             break;
                         case 2:
@@ -275,7 +275,7 @@ DESCRIPTION
                                 if (arrayAttr != null)
                                 {
                                     arrayAttr.Value.CopyTo(arraySize, 0);
-                                    varTree.ArraySize[1] = (int) (EBitConverter.ToInt64(arraySize, 0) + 1);
+                                    varTree.ArraySize[1] = (int)(EBitConverter.ToInt64(arraySize, 0) + 1);
                                 }
                             }
                             break;

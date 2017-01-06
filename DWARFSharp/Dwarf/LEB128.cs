@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElfParser.Dwarf
+namespace DWARFSharp.Dwarf
 {
-    class LEB128
+    public class LEB128
     {
         public static ulong ReadUnsigned(List<byte> data, ref int index)
         {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DWARFSharp.Utility;
 
-namespace ElfParser.Dwarf
+namespace DWARFSharp.Dwarf
 {
     internal class Read
     {

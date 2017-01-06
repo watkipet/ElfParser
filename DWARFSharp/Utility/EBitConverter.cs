@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ElfParser
+namespace DWARFSharp.Utility
 {
-    internal static class EBitConverter
+    public static class EBitConverter
     {
         public static bool DataIsLittleEndian = BitConverter.IsLittleEndian;
 

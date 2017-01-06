@@ -1,4 +1,10 @@
-obj
-bin
+ElfParser/obj
+ElfParser/bin
+ElfParser/ElfParser.suo
+ElfParser/ElfParser.csproj.user
+DWARFSharp/obj
+DWARFSharp/bin
+DWARFSharp/DWARFSharp.suo
+DWARFSharp/DWARFSharp.csproj.user
+packages
 ElfParser.suo
-ElfParser.csproj.user
