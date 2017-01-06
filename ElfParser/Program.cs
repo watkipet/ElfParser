@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DWARFSharp.Dwarf;
+using DWARFSharp.Utility;
 using ELFSharp.ELF;
 
 namespace ElfParser
@@ -94,7 +95,7 @@ DESCRIPTION
 
             // Load ELF file and extract .debug_str
             var elfFile = ELFReader.Load(elfName);
-			DWARFSharp.EBitConverter.DataIsLittleEndian = elfFile.Endianess == Endianess.LittleEndian;
+			EBitConverter.DataIsLittleEndian = elfFile.Endianess == Endianess.LittleEndian;
             var strData = elfFile.Sections.Where(s => s.Name == stringsSectioName).First().GetContents().ToList();
 
             // Parse abbreviations and compilation units
@@ -122,7 +123,7 @@ DESCRIPTION
                     var name = die.GetName(strData);
                     var variable = new Variable(name);
                     var locAttr = die.AttributeList.Find(a => a.Name == DW_AT.Location);
-                    variable.Address = DWARFSharp.EBitConverter.ToInt32(locAttr.Value.Skip(1).Take(4).ToArray(), 0);
+                    variable.Address = EBitConverter.ToInt32(locAttr.Value.Skip(1).Take(4).ToArray(), 0);
 
                     // Traverse variable tree
                     TraverseVariableRecursive(cu, die, variable, strData, false);
@@ -165,7 +166,7 @@ DESCRIPTION
                     // Add size to variable
                     sizeDie = die.AttributeList.Find(a => a.Name == DW_AT.ByteSize);
                     // TODO: Should we be casting? Is sizeDie.Value really 8 bytes?
-                    varTree.ByteSize = (int)DWARFSharp.EBitConverter.ToUInt64(sizeDie.Value, 0);
+                    varTree.ByteSize = (int)EBitConverter.ToUInt64(sizeDie.Value, 0);
 
                     switch (varTree.ByteSize)
                     {
@@ -228,7 +229,7 @@ DESCRIPTION
                     var size = new byte[8];
                     die.AttributeList.Find(a => a.Name == DW_AT.ByteSize).Value.CopyTo(size, 0);
                     // TODO: Should we be casting?
-                    varTree.ByteSize = (int)DWARFSharp.EBitConverter.ToInt64(size, 0);
+                    varTree.ByteSize = (int)EBitConverter.ToInt64(size, 0);
 
                     // Traverse each member
                     foreach (var member in die.Children)
@@ -258,7 +259,7 @@ DESCRIPTION
                             if (arrayAttr != null)
                             {
                                 arrayAttr.Value.CopyTo(arraySize, 0);
-                                varTree.ArraySize[0] = (int)(DWARFSharp.EBitConverter.ToInt64(arraySize, 0) + 1);
+                                varTree.ArraySize[0] = (int)(EBitConverter.ToInt64(arraySize, 0) + 1);
                             }
                             break;
                         case 2:
@@ -274,7 +275,7 @@ DESCRIPTION
                                 if (arrayAttr != null)
                                 {
                                     arrayAttr.Value.CopyTo(arraySize, 0);
-                                    varTree.ArraySize[1] = (int)(DWARFSharp.EBitConverter.ToInt64(arraySize, 0) + 1);
+                                    varTree.ArraySize[1] = (int)(EBitConverter.ToInt64(arraySize, 0) + 1);
                                 }
                             }
                             break;

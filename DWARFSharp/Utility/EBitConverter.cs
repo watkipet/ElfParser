@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DWARFSharp
+namespace DWARFSharp.Utility
 {
     public static class EBitConverter
     {

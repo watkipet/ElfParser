@@ -45,7 +45,7 @@
     <Compile Include="Dwarf\LEB128.cs" />
     <Compile Include="Dwarf\Parse.cs" />
     <Compile Include="Dwarf\Read.cs" />
-    <Compile Include="EBitConverter.cs" />
+    <Compile Include="Utility\EBitConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
